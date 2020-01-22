@@ -3,36 +3,21 @@
 const clog=console.log;
 const cerr=console.error;
 //const path=require('path');
+var MAX_LENGTH=0xFFFFF;
 const net=require('net');
-//const fs=require('fs');
-//const Url=require('url');
-const EventListener=require('events');
+const http=require('http');
+const {URL}=require('url');
+const {Socket}=net;	//{readable,writable,allowHalfOpen} Constructor
+const fs=require('fs');	//allowHalfOpen不会在通信结束后向另一端发送fin包
 
-var n=1;
+let socket=new Socket({readable:true,writable:true,allowHalfOpen:true})
 
 let server=net.createServer(socket=>{
-	socket.write('hello\n');
-	socket.write(`You are the${n++} visitor!`);
-	socket.write(JSON.stringify(socket.address()));
-	/*socket.on('end',$=>{
-		clog('The connections have been closed');
-		server.close();
-	});*/
-	socket.on('error',$=>{
-		if ($) throw $;
+	server.close();		//close事件只会阻止后续的连接请求，当前连接仍然保留
+	socket.on('data',$=>{
+		clog(`客户端消息:${$.toString()}`);
+		socket.end($=>clog('连接已中断'));
 	});
-	socket.on('readable',$=>{
-		let data=socket.read('utf-8');
-		if (data!==null) clog(data.toString());
-	});
-	server.getConnections((e,n)=>{
-		if (e) throw e;
-		clog(`目前在线人数${n}`);
-	});
-	setTimeout($=>socket.end(),10000);
 });
-server.listen(1,'127.0.0.1',_=>{
-	clog('successfully connected');
-	clog(server.listening);
-	clog(server.address());
-});
+
+server.listen(1000,$=>clog('监听中'));
