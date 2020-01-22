@@ -1,11 +1,26 @@
+'use strict'
+
 let clog=console.log;
 let cerr=console.error;
 
 let net=require('net');
+let http=require('http');
 
-let client=net.createConnection(1,'127.0.0.1',$=>{
-	clog(`连接成功`);
-	client.write(`javascript`);
-	client.on('data',$=>clog($.toString()));
+const readline=require('readline');
+
+let {Socket}=net;
+
+const rl=readline.createInterface({
+	input:process.stdin,
+	output:process.stdout
 });
-client.on('end',$=>clog('服务器已经关闭'));
+
+let socket=net.connect(1000,$=>{
+	let data='';
+	rl.question('myn:',$=>{
+		if ($) data=$;
+		else throw new Error('no information!');
+		socket.write(data);
+		rl.close();
+	});
+});
