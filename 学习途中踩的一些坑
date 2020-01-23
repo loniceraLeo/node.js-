@@ -1,3 +1,4 @@
 node.js http模块，用客户端方法 http.request与http服务器进行交互的时候，我们可能希望提交一些数据或文件。我在这里直接request.write(something)..
 但是服务器的响应回调里并没有显式调用这些数据的方法或属性，查阅官方文档也不得解.最后发现为了防止响应过长的问题，node.js并没有提供相关方法。要想
 使用这些数据，只能手动读取。服务器可以调用request.on('read',$=>body+=$);的方式读取这些数据。
+要上传文件或数据，必须手动将option中的method调整为POST
