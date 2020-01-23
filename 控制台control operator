@@ -1,0 +1,5 @@
+ctrl+z 在node.js上同时触发SIGCONT事件 //windows上不可用
+ctrl+c 退出当前进程 在node.js上同时触发SIGINT事件 
+ctrl+a 选中当前打印的所有内容
+ctrl+m 更换光标样式
+TAB 键快速打印当前目录下的文件名
