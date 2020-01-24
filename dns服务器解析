@@ -1,0 +1,31 @@
+'use strict'
+
+let clog=console.log;
+let cerr=console.error;
+
+let net=require('net');
+let http=require('http');
+
+
+let {Socket}=net;
+
+const dns=require('dns');
+const readline=require('readline');
+
+let rl=readline.createInterface({
+	input:process.stdin,
+	output:process.stdout,
+	prompt:'|-->'
+})
+
+rl.prompt();
+rl.on('line',$=>{
+	dns.lookup($.trim(),(e,address,family)=>{
+		if(e) clog('Not found the dns.Please check your connection');
+		clog(`address:${address},family:${family}`);
+		rl.prompt();
+	});
+})
+rl.on('close',$=>{clog('成功退出')});
+
+
