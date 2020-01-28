@@ -1,0 +1,26 @@
+//使用readline和fs创建的一个简单工作日志，它把输入打印到文本文件中
+'use strict'
+let clog=console.log;
+let cerr=console.error;
+
+const http=require('http');
+const fs=require('fs');
+const readline=require('readline');
+
+let rl=readline.createInterface({
+	input:process.stdin,
+	output:process.stdout,
+	prompt:'=>',
+});
+let ws=fs.createWriteStream('./book.txt');
+
+console.clear();
+rl.prompt();
+rl.on('line',$=>{
+	let data=$.trim();
+	ws.write(`${data}\n`);
+	rl.prompt();
+});
+rl.on('close',$=>{
+	clog('退出');
+})
