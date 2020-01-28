@@ -1,26 +1,27 @@
 'use strict'
-
 let clog=console.log;
 let cerr=console.error;
 
-let net=require('net');
-let http=require('http');
-
+const http=require('http');
+const fs=require('fs');
 const readline=require('readline');
+const {Socket}=require('net');
 
-let {Socket}=net;
-
-const rl=readline.createInterface({
+let rl=readline.createInterface({
 	input:process.stdin,
-	output:process.stdout
+	output:process.stdout,
+	prompt:'=>',
 });
+let req='';
 
-let socket=net.connect(1000,$=>{
-	let data='';
-	rl.question('myn:',$=>{
-		if ($) data=$;
-		else throw new Error('no information!');
-		socket.write(data);
-		rl.close();
-	});
+console.clear();
+
+let socket=new Socket({readable:true,writable:true,allowHalfOpen:true});
+
+rl.prompt();
+socket.connect(1000,$=>clog('连接成功'));
+rl.on('line',$=>{
+	let clientData=$.trim();
+	socket.write(clientData);
+	rl.prompt();
 });
