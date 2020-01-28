@@ -1,23 +1,20 @@
 'uses strict'
-//let buf=require('buffer').Buffer;
 const clog=console.log;
 const cerr=console.error;
-//const path=require('path');
-var MAX_LENGTH=0xFFFFF;
-const net=require('net');
 const http=require('http');
-const {URL}=require('url');
-const {Socket}=net;	//{readable,writable,allowHalfOpen} Constructor
-const fs=require('fs');	//allowHalfOpen不会在通信结束后向另一端发送fin包
+const net=require('net');
 
-let socket=new Socket({readable:true,writable:true,allowHalfOpen:true})
-
-let server=net.createServer(socket=>{
-	server.close();		//close事件只会阻止后续的连接请求，当前连接仍然保留
+let times=0;
+let server=net.createServer({allowHalfOpen:true},socket=>{
+	server.close();
+	let nickname='default';
 	socket.on('data',$=>{
-		clog(`客户端消息:${$.toString()}`);
-		socket.end($=>clog('连接已中断'));
+		if (times==0){
+			nickname=$.toString();
+			clog(`${nickname}进入聊天室`);
+			++times;
+		}
+		else clog(`${nickname}:${$.toString()}`);
 	});
 });
-
-server.listen(1000,$=>clog('监听中'));
+server.listen(1000,$=>clog('开始监听'))
